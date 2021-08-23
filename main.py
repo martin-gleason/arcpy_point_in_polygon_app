@@ -1,13 +1,36 @@
 import os, sys, arcpy
 
-#take an address, passed from another script, and geo code it. Return the points
-address = '624 w 43rd Place, Chicago, IL 60609'
-address2 = '736 terry lane, Countryside, IL, 60525'
-address3 = '4936 s Forrestville, Chicago, IL 60622'
-a4 = '2245 w ogden ave, chicago, il 60612'
-police_16d = '5151 North Milwaukee Ave, chicago, il'
+class Geocoder:
+    """This class represents how addresses are received, geocoded, and placed within the proper polygon.
+  Parameters:
+    - Address
+    -- Street Prefix
+    -- Street Number
+    -- Street Direction
+    -- Street Name
+    -- Street type
+    -- Street suffix
+    -- City
+    -- State
+    -- Zip
 
-locator_path = r"C:\Users\Public\ArcGIS\ccjpdLocator\MyProject1\Address_Points_geojson.loc"
+    eg: 1100 South Hamilton Ave, Chicago, Il 60609
+    --- Prefix: none
+    --- Number: 1100
+    --- Direction: South
+    --- Name: Hamilton
+    --- Type: Avenue
+    --- Suffix: None
+
+    Methods:
+        parse address - recieve (post?)
+        geocode address
+    """
+
+
+
+
+locator_path = sys.path(r"C:\Users\Public\ArcGIS\ccjpdLocator\MyProject1\Address_Points_geojson.loc")
 police_district_layer = r"C:\Users\Public\ArcGIS\ccjpdLocator\MyProject1\Police Districts Chicago.lyrx"
 
 #this seems to work
