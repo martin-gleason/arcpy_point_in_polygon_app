@@ -1,9 +1,47 @@
-def add(x, y):
-    result = x + y
-    print(result)
-add(5,3)
 
-def say_hello(name):
-    print(f"Hello, {name}")
+class Store:
+    def __int__(self, name, items):
+        self.name = name
+        self.items = []
 
-say_hello()
+    def add_items(name, price):
+        items = []
+        items[name] = price
+
+    def stock_price(self):
+    # Add together all item prices in self.items and return the total.
+        return sum(self.items['price'])
+
+Target = Store('target')
+
+
+# student = {'name':'Josh', 'school':'Computing', 'grades':(66, 77, 88)}
+#
+#
+# student_list = [
+#     {'name':'Josh', 'school':'Computing', 'grades':(66, 77, 88)},
+#     {'name':'joe', 'school':'Computing', 'grades':(66, 97, 88)},
+#     {'name':'Josephina', 'school':'Computing', 'grades':(97, 97, 98)}
+# ]
+#
+#
+# def average_grade(data):
+#     grades =   data['grades']
+#     return sum(grades) / len(grades)
+#
+# average_grade(student)
+#
+# print(average_grade(student))
+#
+# def average_grade_all_students(student_list):
+#     total = 0
+#     count = 0
+#     for student in student_list:
+#         total += sum(student['grades'])
+#         count += len(student['grades'])
+#
+#     return total / count
+#
+# total = sum(student_list['grades'])
+#
+# print(average_grade_all_students(student_list))
