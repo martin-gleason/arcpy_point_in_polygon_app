@@ -1,4 +1,6 @@
-import os, sys, arcpy
+import os
+import sys
+import arcpy
 
 """This class represents how addresses are received, geocoded, and placed within the proper polygon.
 Parameters:
@@ -33,18 +35,14 @@ class Geocoder:
         self.shape_file = os.path.realpath(r"ArcGIS Files\shapefiles\geo_export_245fc99a-723b-4ad0-ab19-164d6ea290d2.shp")
 
     def __str__(self):
-        return(f"The default locator path is {self.locator_path} and the default address is {self.address}")
+        return f"The default locator path is {self.locator_path} and the default address is {self.address}"
 
-    @classmethod
-    def geocode_address(cls, address, locator_path, min_score=90):
-      locator = arcpy.geocoding.Locator(locator_path)
-      print("this is the locator " + str(locator))
-      candidate = locator.geocode(address, False)
-      print(candidate)
-      return ([sub['Shape'] for sub in candidate][0])
+    def geocode_address(self, address, min_score=90):
+        locator = arcpy.geocoding.Locator(self.locator_path)
+        candidate = locator.geocode(address, False)
+        return [sub['Shape'] for sub in candidate][0]
 
-    @classmethod
-    def return_district(cls, point, shape_file):
+    def return_district(self, point, shape_file):
         field = 'dist_num'
         with arcpy.da.SearchCursor(shape_file, ['SHAPE@', 'OID@', field]) as cursor:
             for row in cursor:
@@ -52,3 +50,17 @@ class Geocoder:
                 if polygonGeom.contains(point):
                     print('the police district is = ' + str(row[2]))
                     break
+
+    def geocode_to_district(self, address):
+        locator = arcpy.geocoding.Locator(self.locator_path)
+        candidate = locator.geocode(address, False)
+        point = [sub['Shape'] for sub in candidate][0]
+        field = 'dist_num'
+        with arcpy.da.SearchCursor(self.shape_file, ['SHAPE@', 'OID@', field]) as cursor:
+            for row in cursor:
+                polygonGeom = row[0]
+                if polygonGeom.contains(point):
+                    print('the police district is = ' + str(row[2]))
+                    break
+
+
