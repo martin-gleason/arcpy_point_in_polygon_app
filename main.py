@@ -22,8 +22,8 @@ eg: 1100 South Hamilton Ave, Chicago, Il 60609
 --- Suffix: None
 
 Methods:
-    parse address - recieve (post?)
-    geocode address
+    get_district: string of address, return police district or NONE if none
+    geocode_address: string address, return points
 """
 
 class Geocoder:
@@ -34,6 +34,13 @@ class Geocoder:
     def __str__(self):
         return(f"The default locator path is {self.locator_path} and the default address is {self.address}")
 
+    def geocode_address(address, locator_path, min_score=90):
+      locator = arcpy.geocoding.Locator(locator_path)
+      print("this is the locator " + str(locator))
+      candidate = locator.geocode(address, False)
+      print(candidate)
+      return ([sub['Shape'] for sub in candidate][0])
+
 
 
 # this seems to work
@@ -41,7 +48,7 @@ class Geocoder:
 
 # next version will take a file
 
-def geocode(address, locator_path, min_score=90):
+def geocode_address(address, locator_path, min_score=90):
     locator = arcpy.geocoding.Locator(locator_path)
     print("this is the locator " + str(locator))
     candidate = locator.geocode(address, False)
