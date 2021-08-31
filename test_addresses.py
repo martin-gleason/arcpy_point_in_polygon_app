@@ -9,5 +9,4 @@ addresses = [
   {'address': '5151 North Milwaukee Ave, chicago, il'}, ##16th District
   {'address': '3261 W. Maypole, Chicago IL 60624'}, # 11th District
   {'address': '7373 E Iowa Avenue, Denver CO 80231'}
-
 ]
