@@ -15,3 +15,15 @@ Current instance methods are:
 * geocode_to_district: Takes an address, geocodes it, and then returns numerical police district
 
 ## Unit Structure Class
+The parent class contains the following variables:
+* spo_fname: SPO First Name
+* spo_lname: SPO Last Name
+* division: Division
+
+A child class of Field Unit has also been created. Those variables include:
+* court_date: Court dates as listed in the monthly roster
+* police_district: Police districts covered by the field unit
+* calendar: The court calendar covered by the unit
+* division: The division the unit belongs to, in lieu of deputies
+
+Both classes default the SPO first name to *officer*. 
