@@ -1,5 +1,12 @@
 """"
 This is a class used to assign officers based on police districts.
+    # unit_structure = {'Division': '', '
+    # Unit Name': '',
+    # 'Court Date': ,
+    # 'Police District': (),
+    # 'SPO First Name': '',
+    # 'Calendar': ()}
+
 """
 
 import json
@@ -7,15 +14,7 @@ import os
 from pathlib import Path
 from typing import Union
 
-
-
 class UnitStructure:
-    # unit_structure = {'Division': '', '
-    # Unit Name': '',
-    # 'Court Date': ,
-    # 'Police District': (),
-    # 'SPO First Name': '',
-    # 'Calendar': ()}
 
     def __init__(self, spo_lname: str, division=4, spo_fname:str= 'Officer'):
         self.division = division
@@ -41,12 +40,19 @@ class FieldUnit(UnitStructure):
        super().__init__(spo_lname, division, spo_fname)
        self.court_date = court_date
        self.police_district = police_district
-       self.cal = calendar
+       self.calendar = calendar
     
     def __str__(self):
         return (f'Superivisor {self.spo_lname} is in the {self.division} division, ' \
             f'and has covers the following police district(s): {self.police_district}. ' \
-            f'Court is in {self.cal} on the following days: {self.court_date}')
+            f'Court is in {self.calendar} on the following days: {self.court_date}')
+
+    def get_police_district(self):
+        return self.police_district
+    
+    def get_supervisor(self, district: Union[int, str]):
+        if district in self.police_district:
+            return self.get_spo_name()
 
 def list_of_units(*units):
     list_of_units = []
@@ -60,21 +66,19 @@ def write_unit_to_json(list_of_units:[]):
             json.dump(unit, f)
             f.write('\n')
 
-#the next function will take the saved filed and load it into a class
-def load_units():
-    return 'not developed yet'
+def load_units(file):
+    units = []
+    with open(os.path.relpath(file), 'r') as f:
+        for unit in f:
+            units.append(json.loads(unit))
+    return units
 
-generic = UnitStructure('Riveria')
-lele = FieldUnit(spo_lname = 'Engelman', court_date = ['Tuesday', 'Cal 58', 'Thursday', 'Cal 60'], police_district = (16, 22), calendar = (58, 60))
 
-marty = FieldUnit(spo_lname = 'Gleason', court_date = ['Wednesay', 'Cal 55'], police_district = (9), calendar = (55, ))
-joe = FieldUnit(spo_lname='Pacelt', court_date = ['Wednesay', 'Cal 55'], police_district = (9), calendar = (55, ))
-
-print(lele)
-print(marty.__dict__)
-print(generic)
-print(joe)
-
-x = list_of_units(lele, marty, joe)
-
-write_unit_to_json(x)
+def load_units_to_class(file):
+    units = []
+    with open(os.path.relpath(file), 'r') as f:
+        for unit in f:
+            temp_unit = json.loads(unit)
+            units.append(FieldUnit(**temp_unit))
+    return units
+    

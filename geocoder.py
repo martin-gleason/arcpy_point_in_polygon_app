@@ -34,13 +34,14 @@ Instance Methods:
 
 class Geocoder:
     def __init__(self, address = '1100 South Hamilton Ave, Chicago, Il 60612'):
-        self.locator_path = os.path.realpath(r"ArcGIS Files\Address_Points_geojson.loc")
+        self.locator_path = os.path.realpath(r'ArcGIS Files\Address_Points_geojson.loc')
         self.address = address
         #thinking about turning this into a dictionary so we can have different ones called by name
-        self.shape_file = os.path.realpath(r"ArcGIS Files\shapefiles\geo_export_245fc99a-723b-4ad0-ab19-164d6ea290d2.shp")
+        self.shape_file = os.path.realpath(r'ArcGIS Files\shapefiles\geo_export_245fc99a-723b-4ad0-ab19-164d6ea290d2.shp')
 
     def __str__(self):
-        return f"The default locator path is {self.locator_path} and the default address is {self.address}."
+        return f'The default locator path is {self.locator_path}' \
+        f'and the default address is {self.address}.'
 
     def set_shape_file(self):  #file -- have to look into uploading a file
         return 'not developed yet.'
