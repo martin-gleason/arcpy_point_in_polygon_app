@@ -1,7 +1,7 @@
 from user import User
 
 users = [
-    User(1, 'bob', 1234),
+    User(1, 'bob', "1234"),
     User(2, 'tony', 'gleason')
 
 ]
@@ -15,6 +15,6 @@ def authenticate(username, password):
     if user and user.password == password:
         return user
 
-def idenitty(payload):
+def identity(payload):
     user_id = payload['identity']
     return userid_mapping.get(user_id, None)

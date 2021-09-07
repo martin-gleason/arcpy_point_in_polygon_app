@@ -10,6 +10,8 @@ api = Api(app)
 
 jwt = JWT(app, authenticate, identity) #/auth; send username, password
 
+items = []
+
 class Item(Resource):
     @jwt_required()
     def get(self, name):
