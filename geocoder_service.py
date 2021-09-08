@@ -1,19 +1,17 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request
 from flask_restful import Resource, Api, reqparse
-import unit_structure as u
-from flask_jwt import JWT, jwt_required
-from security import authenticate, identity
+import unit_structure as office
+import geocoder
+
+gc = geocoder.Geocoder()
+
+office = office.load_units_to_class('units\list_of_units.json')
 
 app = Flask(__name__)
-app.secret_key = 'poguemahone'
-api = Api(app)
 
-jwt = JWT(app, authenticate, identity) #/auth; send username, password
 
-items = []
 
 class Item(Resource):
-    @jwt_required()
     def get(self, name):
         item = next(filter(lambda x: x['name'] == name, items), None)
         return {'item': item}, 200 if item else 404
@@ -54,9 +52,6 @@ class Item(Resource):
 class ItemList(Resource):
     def get(self):
         return {'items': items}
-
-api.add_resource(Item, '/item/<string:name>')
-api.add_resource(ItemList, '/items')
 
 
 
