@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, render_template
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 import unit_structure as u
 from flask_jwt import JWT, jwt_required
 from security import authenticate, identity
@@ -15,21 +15,45 @@ items = []
 class Item(Resource):
     @jwt_required()
     def get(self, name):
-        for item in items:
-            if item['name'] == name:
-                return item
-        return {'item': None}, 404
+        item = next(filter(lambda x: x['name'] == name, items), None)
+        return {'item': item}, 200 if item else 404
 
     def post(self, name):
-        data = request.get_json(force=True) #do not need content type header to be set to application/json; dangerous.
-       #data = request.get_json(silent==True) #returns none
-        item = {'name': name, 'price': data['price']}
+        if next(filter(lambda x: x['name'] == name, items), None) is not None:
+            return {'message': "An item with name '{}' lready exists.".format(name)}, 400
+
+        data = request.get_json()
         items.append(item)
-        return item, 201
+        return item
+
+    def delete(self, name):
+        global items
+        items = list(filter(lambda x: x['name'] != name, items))
+        return {'message': 'Item deleted.'}
+
+
+    def put(self, name):
+        parser = reqparse.RequestParser() #can go through fields in a form like in json payload
+        parser.add_argument('price', 
+            type = float,
+            required=True,
+            help='This Field cannot be left blank!'
+        )
+
+        data = parser.parse_args()
+
+        item = next(filter(lambda x: x['name'] == name, items), None)
+        if item is None:
+            item = {'name': name, 'price': data['price']}
+            items.append(item)
+        else: 
+            item.update(data)
+        return item
+        
 
 class ItemList(Resource):
     def get(self):
-        return{'items': item}
+        return {'items': items}
 
 api.add_resource(Item, '/item/<string:name>')
 api.add_resource(ItemList, '/items')
