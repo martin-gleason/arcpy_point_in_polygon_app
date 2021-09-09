@@ -1,6 +1,6 @@
 import os
 import sys
-import arcgis
+import arcpy
 
 """This class represents how addresses are received, geocoded, and placed within the proper polygon.
 Possible parameters:
