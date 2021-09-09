@@ -1,0 +1,8 @@
+{
+  "python.linting.prospectorEnabled": false,
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.globalModuleInstallation": true,
+  "python.envFile": "C:\\Users\\martin.gleason\\AppData\\Roaming\\Python\\Python39\\Scripts",
+  "git.ignoreLimitWarning": true
+}
