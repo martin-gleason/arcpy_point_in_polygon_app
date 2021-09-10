@@ -3,3 +3,4 @@ templates/
 main.py
 test_class_structure.py
 unit_creation
+.vscode
