@@ -41,7 +41,10 @@ class GeocodeAddress(Resource):
         parse = p.GetAddress(Resource)
         data = parse.parser.parse_args()
         points = gc.geocode_address(data['address'])
-        return {'address': points}
+        if points:
+            return {'address': str(points)}
+        else:
+            return {'address': 'Address does not appear to be in Cook County'}
     
 
 
