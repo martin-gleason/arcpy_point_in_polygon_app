@@ -30,10 +30,10 @@ class Units(Resource):
 
 class GetDistrict(Resource):
     def get(self):
-        pd = []
-        for unit in city_units:
-            pd.append(unit.get_police_district())
-        return pd
+       parse = p.GetAddress(Resource)
+       data = parse.parser.parse_args()
+       district = gc.geocode_to_district(data['address'])
+       return {'Police District': district}
         
 
 class GeocodeAddress(Resource):
@@ -47,10 +47,21 @@ class GeocodeAddress(Resource):
             return {'address': 'Address does not appear to be in Cook County'}
     
 
+class AssignByAddress(Resource):
+    def get(self):
+        parse = p.GetAddress(Resource)
+        data = parse.parser.parse_args()
+        district = gc.geocode_to_district(data['address'])
+        for unit in city_units:
+            if unit.get_supervisor(int(district)):
+                return {'supervisor': str(unit.spo_lname)}
+
+        
 
 
 api.add_resource(Units, '/units')
 api.add_resource(GetDistrict, '/districts')
 api.add_resource(GeocodeAddress, '/geocode/')
+api.add_resource(AssignByAddress, '/assign/')
 app.run(port=5000, debug=True)
 

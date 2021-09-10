@@ -33,7 +33,7 @@ class UnitStructure:
         return f'The new SPO is SPO {self.spo_lname}'
 
     def get_spo_name(self):
-        return f'The Supervisor is {self.spo_fname} {self.spo_lname}'
+        return f'{self.spo_fname}, {self.spo_lname}'
 
 class FieldUnit(UnitStructure):
     def __init__(self, spo_lname: str,  court_date: list, police_district: Union[str, int, tuple], calendar: Union[str, int, tuple], division = 4, spo_fname:str = 'Officer'):
