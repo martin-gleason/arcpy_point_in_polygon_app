@@ -1,5 +1,5 @@
 import typing_extensions
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_restful import Resource, Api, reqparse
 import unit_structure as office
 import json
@@ -58,6 +58,14 @@ class AssignByAddress(Resource):
 
         
 
+
+@app.context_processor
+def geocoder_version():
+    return dict(shape_file=gc.get_shape_file())
+
+@app.route('/')
+def index():
+    return render_template('index.html', title = 'Web Front to API')
 
 api.add_resource(Units, '/units')
 api.add_resource(GetDistrict, '/districts')
