@@ -47,7 +47,7 @@ class Geocoder:
         return 'not developed yet.'
 
     def get_shape_file(self):
-        return f'the shapefile is {self.shape_file}'
+        return f'The shapefile is {self.shape_file}'
 
     def geocode_address(self, address, min_score=90):
         locator = arcpy.geocoding.Locator(self.locator_path)

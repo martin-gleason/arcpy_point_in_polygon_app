@@ -1,0 +1,10 @@
+/* CSS for Flask/GIS app */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+
+body{
+    font-family: Roboto;
+}
+
+label{
+    font-weight: bold;
+}
