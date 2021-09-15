@@ -42,7 +42,8 @@ class Geocoder:
 
     def __str__(self):
         return f'The default locator path is {self.locator_path}' \
-        f'and the default address is {self.address}.'
+        f' and the default address is {self.address}.' \
+        f' The default shapefile for assignment is {self.shape_file}.'
 
     # def set_shape_file(self, shapefile):
     #     self.__setattr___(self, 'shape_file', shapefile)
