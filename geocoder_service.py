@@ -5,10 +5,13 @@ import unit_structure as office
 import json
 import address_parser as p
 import geocoder
+import gis_forms
 
 #load geocoder
 gc = geocoder.Geocoder()
 
+#Secret Key: have to make more secure
+SECRET_KEY='SECRET TO EVERYBODY'
 
 #load city units
 #turns json file to list
@@ -16,6 +19,7 @@ city_units = office.load_units_to_class('units\list_of_units.json')
 
 #load app
 app = Flask(__name__)
+app.config.from_object(__name__)
 api = Api(app)
 
 
@@ -63,10 +67,26 @@ class AssignByAddress(Resource):
 def geocoder_version():
     return dict(shape_file=gc.get_shape_file())
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', title = 'Web Front to API')
 
+    form=gis_forms.AddressForm()
+    street = request.form.get('address')
+    line2 = request.form.get('address_line_2')
+    city = request.form.get('city')
+    state = request.form.get('state')
+    zip = request.form.get('zip')
+    zip4 = request.form.get('zip4')
+
+    #address = street.join(street, line2, city, state, zip, sep=" ")
+
+    # if zip4:
+    #     address = address + ' + ' + zip4
+
+    return render_template('index.html', form=form)
+
+
+#rest endpoints for consumption
 api.add_resource(Units, '/units')
 api.add_resource(GetDistrict, '/districts')
 api.add_resource(GeocodeAddress, '/geocode/')

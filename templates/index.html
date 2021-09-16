@@ -5,19 +5,29 @@
 <body>
 
 <div>
-	{{ shape_file }}
+	<p>{{ shape_file }} </p>
+
 </div>
 
-</p>
-</p>
-
-<form>
-	<label>Address:
-		<input name="address">
-	</label>
-	<button>Submit</button
-</form>
 
 
+<div class="Container">
+	{% block content %}
+	<form action="/" method="POST" role="form">
+		<label for="adddres">Address Line 1 </label>{{ form.address }} </p>
+		<label for="adddres_line2">Address Line 2 </label> {{  form.address_line2  }}</p>
+		<label for="city">City </label>{{ form.city }}</p>
+		<label for="state">State </label>{{ form.state }}</p>
+		<label for="zip">Zip Code </label>{{ form.zip }}</p>
+		<label for="zip">Zip Code + 4 </label>{{ form.zip4 }}</p>
 
-</body></html>
+		<input type="submit" value="Geocode!"/>
+	</form>
+	{% endblock %}
+
+</div>
+
+
+</body>
+
+</html>

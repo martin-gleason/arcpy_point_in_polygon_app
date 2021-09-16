@@ -37,8 +37,8 @@ class Geocoder:
         self.locator_path = os.path.realpath(r'ArcGIS Files\Address_Points_geojson.loc')
         self.address = address
         #thinking about turning this into a dictionary so we can have different ones called by name
-        #self.shape_file = os.path.realpath(r'ArcGIS Files\shapefiles\geo_export_245fc99a-723b-4ad0-ab19-164d6ea290d2.shp')
-        self.shape_file = os.path.realpath(r'ArcGIS Files\probation_districts\probationDistricts.shp')
+        self.shape_file = os.path.realpath(r'ArcGIS Files\shapefiles\geo_export_245fc99a-723b-4ad0-ab19-164d6ea290d2.shp')
+        #self.shape_file = os.path.realpath(r'ArcGIS Files\probation_districts\probationDistricts.shp')
 
     def __str__(self):
         return f'The default locator path is {self.locator_path}' \
