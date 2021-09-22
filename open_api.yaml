@@ -1,0 +1,21 @@
+---
+
+openapi: 3.0.0
+info:
+  version: 0.8
+  title: ArcPy Point in Polygon
+  description: This API will will geocode addresses, find police or municipal districts based on an address, and assign SPOs.
+
+servers:
+  - url: localhost:5000
+
+#authentication
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  security:
+    - BasicAuth: []
+
+paths: {}

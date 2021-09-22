@@ -1,30 +1,42 @@
+
 LocFileUseUTF8 = True
 Category = Address
 Description = Locator built with PointAddress
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  Properties Required by ArcGIS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 CLSID = {26AC4C70-EA6E-4125-86F9-5ED7970D15F7}
 UICLSID = {AE5A3A0E-F756-11D2-9F4F-00C04F8ED1C4}
-
-WarmUp = False
-
-MinimumCandidateScore = 60
 MinimumMatchScore = 60
-
-NumThreads = 4
-
-MaxCandidates = 50
-
-MaxSuggestCandidates = 15
-DefaultSuggestCandidates = 5
-
-; BatchOutputFields =
-; CandidateOutputFields =
-; CountriesFilter =
-; CategoriesFilter =
-; ReverseFeatureTypesFilter =
-
+MinimumCandidateScore = 60
+EndOffset = 6.371
+SideOffset = 6.371
+BatchSize = 500
+BuildDate = 2021-06-04 09:41:40
+BuilderVersion = 2.7
 DefaultLocationType = rooftop
+DefaultSuggestCandidates = 5
+EnableXYProviders = true
+FirstPageSize = 200
+LocatorVersion = 11.0
+LocatorWorkspaceString = ProgID = esriDataSourcesFile.ShapefileWorkspaceFactory; Path = C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\
 MatchOutOfRange = true
-
-EnableXYProviders = TRUE
-
+MaxBatchCandidates = 50
+MaxCandidates = 50
+MaxSuggestCandidates = 15
+NewPageSize = 16
+NumThreads = 4
 PrecisionType = GLOBAL_HIGH
+RebuildStartTime = 132767177350860000
+RebuildStartTimeAscii = 5:08:55 PM
+
+SR.wkid = 4326
+
+SafeLocatorName = Address_Points_geojson
+ServerThreadBatchSize = 10
+SupportedAddressTypes = Subaddress, PointAddress
+SupportedFeatureTypes = PointAddress
+SupportedRoles = PointAddress
+WarmUp = false

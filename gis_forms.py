@@ -25,11 +25,11 @@ class AddressForm(FlaskForm):
     (?P<ZIP>\d{5})
     ''', flags=re.IGNORECASE | re.X)
 
-    address=StringField('address', validators=[validators.regexp(street_verification)])
-    address_line2=StringField('address_2')
-    city=StringField('city', validators=[validators.InputRequired()])
-    state=StringField('state', validators=[validators.InputRequired()])
-    zip=StringField('zip', validators=[validators.InputRequired()])
-    zip4=StringField('zip4')
+    street = StringField('address')
+    address_line2 = StringField('address_line2')
+    city = StringField('city', validators=[validators.InputRequired()])
+    state = StringField('state', validators=[validators.InputRequired()])
+    zip = StringField('zip', validators=[validators.InputRequired()])
+    zip4 = StringField('zip4')
 
-    submit=SubmitField('Submit')
+    submit = SubmitField('Submit')

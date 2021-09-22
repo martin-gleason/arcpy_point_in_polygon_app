@@ -1,6 +1,7 @@
 import typing_extensions
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, flash
 from flask_restful import Resource, Api, reqparse
+from flask_wtf.csrf import CSRFProtect, CSRFError
 import unit_structure as office
 import json
 import address_parser as p
@@ -18,10 +19,12 @@ SECRET_KEY='SECRET TO EVERYBODY'
 city_units = office.load_units_to_class('units\list_of_units.json')
 
 #load app
+SESSION_COOKIE_SECURE = True
 app = Flask(__name__)
 app.config.from_object(__name__)
 api = Api(app)
-
+csrf = CSRFProtect()
+csrf.init_app(app)
 
 #json parser being created as seperate class
 
@@ -69,14 +72,38 @@ def geocoder_version():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
     form=gis_forms.AddressForm()
-    street = request.form.get('address')
-    line2 = request.form.get('address_line_2')
+    street = request.form.get('street')
+    line2 = request.form.get('address_line2')
     city = request.form.get('city')
     state = request.form.get('state')
     zip = request.form.get('zip')
     zip4 = request.form.get('zip4')
+
+    spo =""
+    if form.validate_on_submit():
+        if zip4:
+            address = street + " " + line2 + " " + city + ", " + state.upper() + " "+ zip + "+" + zip4
+        else:
+            address = street + " " + line2 + " " + city + ", " + state.upper() + " " + zip
+
+        district = gc.geocode_to_district(address)
+        print(district)
+
+        for unit in city_units:
+            if unit.get_supervisor(district):
+                spo = unit.get_spo_name()
+
+
+        flash(f"The Police District is: {district} " + \
+              f". And the SPO is: {spo}")
+
+    else:
+        print('Failed to validate.')
+        print(form.errors)
+
+
+    #print("this is the address - ".join(address))
 
     #address = street.join(street, line2, city, state, zip, sep=" ")
 

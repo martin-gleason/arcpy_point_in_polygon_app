@@ -4,18 +4,27 @@
 </head>
 <body>
 
-<div>
-	<p>{{ shape_file }} </p>
+<div class="Messages">
+	{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 
 </div>
 
 
-
 <div class="Container">
 	{% block content %}
-	<form action="/" method="POST" role="form">
-		<label for="adddres">Address Line 1 </label>{{ form.address }} </p>
-		<label for="adddres_line2">Address Line 2 </label> {{  form.address_line2  }}</p>
+	<form action="/" method="POST" role="form"/>
+		{{ form.hidden_tag() }}
+
+		<label for="street">Address Line 1 </label>{{ form.street }} </p>
+		<label for="address_line2">Address Line 2 </label> {{  form.address_line2  }}</p>
 		<label for="city">City </label>{{ form.city }}</p>
 		<label for="state">State </label>{{ form.state }}</p>
 		<label for="zip">Zip Code </label>{{ form.zip }}</p>
@@ -27,6 +36,11 @@
 
 </div>
 
+<div class="Error">
+	{% if form.errors %}
+		{{ form.errors }}
+	{% endif %}
+</div>
 
 </body>
 

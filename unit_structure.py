@@ -32,7 +32,7 @@ class UnitStructure:
         return f'The new SPO is SPO {self.spo_lname}'
 
     def get_spo_name(self):
-        return f'{self.spo_fname}, {self.spo_lname}'
+        return f'{self.spo_lname}, {self.spo_fname}'
 
 class FieldUnit(UnitStructure):
     def __init__(self, spo_lname: str,  court_date: list, police_district: list, calendar:list, division = 4, spo_fname:str = 'Officer'):
