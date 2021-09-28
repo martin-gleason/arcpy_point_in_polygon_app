@@ -1,0 +1,143 @@
+
+LocFileUseUTF8 = True
+Category = Address
+Description = Geocode addresses against multiple address locators.
+
+Version = 10.0
+UseRelativePaths = TRUE
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  Properties Required by ArcGIS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+CLSID = {29B85A89-D2CE-4aeb-BC3F-661A3D2C296E}
+UICLSID = {3D486637-6BCF-4A0C-83DB-A02D437FB8FC}
+
+Fields = Address
+Fields = Address2
+Fields = Address3
+Fields = Neighborhood
+Fields = City
+Fields = Subregion
+Fields = Region
+Fields = Postal
+Fields = PostalExt
+Fields = CountryCode
+
+FieldAliases = Address or Place
+FieldAliases = Address2
+FieldAliases = Address3
+FieldAliases = Neighborhood
+FieldAliases = City
+FieldAliases = County
+FieldAliases = State
+FieldAliases = ZIP
+FieldAliases = ZIP4
+FieldAliases = Country
+
+FieldNames.0 = Address
+FieldNames.1 = Address2
+FieldNames.2 = Address3
+FieldNames.3 = Neighborhood
+FieldNames.4 = City
+FieldNames.5 = Subregion
+FieldNames.6 = Region
+FieldNames.7 = Postal
+FieldNames.8 = PostalExt
+FieldNames.9 = CountryCode
+
+FieldsRequired = FALSE
+FieldsRequired = FALSE
+FieldsRequired = FALSE
+FieldsRequired = FALSE
+FieldsRequired = FALSE
+FieldsRequired = FALSE
+FieldsRequired = FALSE
+FieldsRequired = FALSE
+FieldsRequired = FALSE
+FieldsRequired = FALSE
+
+FieldSizes = 100
+FieldSizes = 100
+FieldSizes = 100
+FieldSizes = 50
+FieldSizes = 50
+FieldSizes = 50
+FieldSizes = 50
+FieldSizes = 20
+FieldSizes = 20
+FieldSizes = 100
+
+WriteXYCoordFields = FALSE
+WriteStandardizedAddressField = FALSE
+WriteReferenceIDField = FALSE
+WritePercentAlongField = FALSE
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  Composite Locator Properties
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+CL.Locator = Address_Points
+CL.Locator = roadLocator
+
+CL.SR = ByDescr
+CL.SR.Descr = GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]]
+CL.SR.Domain = -17463800.000000,-46132600.000000,2955094491692.938965,2955065822892.938965
+
+CL.SkipBadLocators = FALSE
+
+CL.Address_Points.Enabled = TRUE
+
+CL.Address_Points.Input = Address
+CL.Address_Points.Input = Address2
+CL.Address_Points.Input = Address3
+CL.Address_Points.Input = Neighborhood
+CL.Address_Points.Input = City
+CL.Address_Points.Input = Subregion
+CL.Address_Points.Input = Region
+CL.Address_Points.Input = Postal
+CL.Address_Points.Input = PostalExt
+CL.Address_Points.Input = CountryCode
+
+CL.Address_Points.LocWks = Type=Database;Wks=(ProgID = esriDataSourcesFile.ShapefileWorkspaceFactory; Path = ..\MyProject1)
+CL.Address_Points.Name = Address_Points_geojson
+CL.Address_Points.Select = 
+
+CL.roadLocator.Enabled = TRUE
+
+CL.roadLocator.Input = Address
+CL.roadLocator.Input = Address2
+CL.roadLocator.Input = Address3
+CL.roadLocator.Input = Neighborhood
+CL.roadLocator.Input = City
+CL.roadLocator.Input = Subregion
+CL.roadLocator.Input = Region
+CL.roadLocator.Input = Postal
+CL.roadLocator.Input = PostalExt
+CL.roadLocator.Input = CountryCode
+
+CL.roadLocator.LocWks = Type=Database;Wks=(ProgID = esriDataSourcesFile.ShapefileWorkspaceFactory; Path = .)
+CL.roadLocator.Name = roadLocator
+CL.roadLocator.Select = 
+
+AdditionalReverseOutputs = Addr_type
+AdditionalReverseOutputs = Type
+
+BuildVersion = $Revision: 14$
+BuildVersionDate = $Date: 1/31/2012 5:36:09 PM$
+LocatorWorkspaceString = ProgID = esriDataSourcesFile.ShapefileWorkspaceFactory; Path = C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\
+MaxSuggestCandidates = 10
+RebuildStartTime = 132773160900780000
+RebuildStartTimeAscii = 3:21:30 PM
+RuntimeMemoryLimit = 1024000000
+SafeLocatorName = ccjpdComposite
+SingleLineField = SingleLine
+SingleLineFieldAlias = Single Line Input
+
+SingleLineFieldNames = Address
+SingleLineFieldNames = SingleLine
+SingleLineFieldNames = FullAddress
+SingleLineFieldNames = Customer
+
+SingleLineFieldSize = 100
+UseMultithreading = True

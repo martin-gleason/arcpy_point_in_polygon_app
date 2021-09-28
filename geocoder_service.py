@@ -1,6 +1,7 @@
 import typing_extensions
 from flask import Flask, jsonify, request, render_template, flash
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Resource, Api, reqparse, fields, marshal_with
+
 from flask_wtf.csrf import CSRFProtect, CSRFError
 import unit_structure as office
 import json
@@ -72,7 +73,8 @@ def geocoder_version():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    form=gis_forms.AddressForm()
+    spo = ''
+    form = gis_forms.AddressForm()
     street = request.form.get('street')
     line2 = request.form.get('address_line2')
     city = request.form.get('city')
@@ -80,7 +82,6 @@ def index():
     zip = request.form.get('zip')
     zip4 = request.form.get('zip4')
 
-    spo =""
     if form.validate_on_submit():
         if zip4:
             address = street + " " + line2 + " " + city + ", " + state.upper() + " "+ zip + "+" + zip4
@@ -88,12 +89,13 @@ def index():
             address = street + " " + line2 + " " + city + ", " + state.upper() + " " + zip
 
         district = gc.geocode_to_district(address)
-        print(district)
 
         for unit in city_units:
-            if unit.get_supervisor(district):
+            if int(district) in unit.get_police_district():
                 spo = unit.get_spo_name()
-
+                break
+            else:
+                spo = 'Nope'
 
         flash(f"The Police District is: {district} " + \
               f". And the SPO is: {spo}")
@@ -115,7 +117,7 @@ def index():
 
 #rest endpoints for consumption
 api.add_resource(Units, '/units')
-api.add_resource(GetDistrict, '/districts')
+api.add_resource(GetDistrict, '/getdistrict')
 api.add_resource(GeocodeAddress, '/geocode/')
 api.add_resource(AssignByAddress, '/assign/')
 app.run(port=5000, debug=True)

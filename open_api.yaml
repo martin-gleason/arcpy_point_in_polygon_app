@@ -1,5 +1,4 @@
 ---
-
 openapi: 3.0.0
 info:
   version: 0.8
@@ -18,4 +17,35 @@ components:
   security:
     - BasicAuth: []
 
-paths: {}
+
+#------
+paths:
+  /:
+    get:
+      description: Form with status of API methods
+      responses: []
+
+
+    post:
+      descrption: Take form data address data and return police district and the SPO over this geographic area.
+      responses:
+      '200':
+        description: Successfully returned s
+
+  /units:
+    get:
+      description: returns a JSON object containing the SPO name, field officers, police district, and court information
+
+  /getdistricts:
+    get:
+      description: Returns the police district from an address
+
+  /geocode:
+    get:
+      description: Return point geometry of an address
+
+  /assign:
+    get:
+      description: return the name of the Supervising probation officer who is over that geographical area
+
+
