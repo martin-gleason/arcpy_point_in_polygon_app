@@ -50,11 +50,10 @@ class FieldUnit(UnitStructure):
         return self.police_district
     
     def get_supervisor(self, district):
-        if isinstance(district, int):
-            if district in self.police_district:
-                return self.get_spo_name()
+        if district in self.get_police_district():
+            return self.get_spo_name()
         else:
-            return f'{district} is not type Integer'
+            return None
 
 def list_of_units(*units):
     list_of_units = []

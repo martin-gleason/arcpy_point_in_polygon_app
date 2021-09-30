@@ -18,6 +18,8 @@ SECRET_KEY='SECRET TO EVERYBODY'
 #load city units
 #turns json file to list
 city_units = office.load_units_to_class('units\list_of_units.json')
+for unit in city_units:
+    print(unit)
 
 #load app
 SESSION_COOKIE_SECURE = True
@@ -82,6 +84,9 @@ def index():
     zip = request.form.get('zip')
     zip4 = request.form.get('zip4')
 
+    for unit in city_units:
+        print(unit)
+
     if form.validate_on_submit():
         if zip4:
             address = street + " " + line2 + " " + city + ", " + state.upper() + " "+ zip + "+" + zip4
@@ -89,19 +94,18 @@ def index():
             address = street + " " + line2 + " " + city + ", " + state.upper() + " " + zip
 
         district = gc.geocode_to_district(address)
-        print(district)
+        #the issue is right here.
 
         for unit in city_units:
             if unit.get_supervisor(district):
+                print(unit.get_spo_name())
                 spo = unit.get_spo_name()
                 break
             else:
-                spo = 'Nope'
+                spo = 'Hell Nope'
 
-        flash(f"The Police District is: {district} ")
-        #
-        # ) + \
-        #       f". And the SPO is: {spo}")
+        flash(f"The Police District is: {district}. \
+         And the SPO is: {spo}")
 
     else:
         print('Failed to validate.')
