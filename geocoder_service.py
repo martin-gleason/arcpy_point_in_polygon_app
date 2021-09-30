@@ -89,28 +89,23 @@ def index():
             address = street + " " + line2 + " " + city + ", " + state.upper() + " " + zip
 
         district = gc.geocode_to_district(address)
+        print(district)
 
         for unit in city_units:
-            if int(district) in unit.get_police_district():
+            if unit.get_supervisor(district):
                 spo = unit.get_spo_name()
                 break
             else:
                 spo = 'Nope'
 
-        flash(f"The Police District is: {district} " + \
-              f". And the SPO is: {spo}")
+        flash(f"The Police District is: {district} ")
+        #
+        # ) + \
+        #       f". And the SPO is: {spo}")
 
     else:
         print('Failed to validate.')
         print(form.errors)
-
-
-    #print("this is the address - ".join(address))
-
-    #address = street.join(street, line2, city, state, zip, sep=" ")
-
-    # if zip4:
-    #     address = address + ' + ' + zip4
 
     return render_template('index.html', form=form)
 
