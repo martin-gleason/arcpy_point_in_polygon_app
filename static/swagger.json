@@ -1,0 +1,15 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "geocoder service",
+    "version": ".9",
+    "title": "CCJPD Geocoder and Assignment Service",
+    "contact": {
+      "email": "martin.gleason@cookcountyil.gov"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  }
+}

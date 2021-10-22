@@ -1,7 +1,7 @@
 import typing_extensions
 from flask import Flask, jsonify, request, render_template, flash
 from flask_restful import Resource, Api, reqparse, fields, marshal_with
-
+from flask_swagger_ui import get_swaggerui_blueprint
 from flask_wtf.csrf import CSRFProtect, CSRFError
 import unit_structure as office
 import json
@@ -28,6 +28,21 @@ app.config.from_object(__name__)
 api = Api(app)
 csrf = CSRFProtect()
 csrf.init_app(app)
+
+### swagger specific ###
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': 'geocoder_service swagger blueprint'
+    }
+)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+### end swagger specific ###
+
+
 
 #json parser being created as seperate class
 
@@ -94,10 +109,12 @@ def index():
             address = street + " " + line2 + " " + city + ", " + state.upper() + " " + zip
 
         district = gc.geocode_to_district(address)
+        print(f'The district is {district}')
+        print(type(district))
         #the issue is right here.
 
         for unit in city_units:
-            if unit.get_supervisor(district):
+            if unit.get_supervisor(int(district)):
                 print(unit.get_spo_name())
                 spo = unit.get_spo_name()
                 break
