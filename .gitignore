@@ -7,3 +7,4 @@ unit_creation.py
 js_script.html
 composite_locator.py
 learning_mm.py
+*.lock

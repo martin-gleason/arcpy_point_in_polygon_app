@@ -114,7 +114,7 @@ def index():
         #the issue is right here.
 
         for unit in city_units:
-            if unit.get_supervisor(int(district)):
+            if unit.get_supervisor(district):
                 print(unit.get_spo_name())
                 spo = unit.get_spo_name()
                 break
