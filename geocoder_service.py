@@ -18,8 +18,6 @@ SECRET_KEY='SECRET TO EVERYBODY'
 #load city units
 #turns json file to list
 city_units = office.load_units_to_class('units\list_of_units.json')
-for unit in city_units:
-    print(unit)
 
 #load app
 SESSION_COOKIE_SECURE = True
@@ -114,15 +112,13 @@ def index():
         #the issue is right here.
 
         for unit in city_units:
-            if unit.get_supervisor(district):
-                print(unit.get_spo_name())
-                spo = unit.get_spo_name()
-                break
-            else:
-                spo = 'Hell Nope'
+           if district in unit.get_police_district():
+               spo = unit.get_spo_name()
+           else:
+                spo = 'Not found'
 
-        flash(f"The Police District is: {district}. \
-         And the SPO is: {spo}")
+
+        flash(f"The Police District is: {district}.")
 
     else:
         print('Failed to validate.')

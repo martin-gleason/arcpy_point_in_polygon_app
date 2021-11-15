@@ -37,8 +37,8 @@ class Geocoder:
         self.locator_path = os.path.abspath(r"C:\Users\Public\LocatorFiles\composite_locator.loc")
         self.address = address
         #thinking about turning this into a dictionary so we can have different ones called by name
-        #self.shape_file = os.path.realpath(r'\ArcGIS Files\shapefiles\geo_export_245fc99a-723b-4ad0-ab19-164d6ea290d2.shp')
-        self.shape_file = os.path.abspath(r"C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\shapefiles\beats_districts.shp")
+        self.shape_file = os.path.abspath(r"C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\shapefiles\geo_export_245fc99a-723b-4ad0-ab19-164d6ea290d2.shp")
+        #self.shape_file = os.path.abspath(r"C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\shapefiles\beats_districts.shp")
 
 
     def __str__(self):

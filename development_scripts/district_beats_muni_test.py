@@ -5,9 +5,10 @@ import arcpy
 gc = gc.Geocoder()
 point = ''
 
-shape_file = os.path.abspath(r"C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\shapefiles\beats_districts.shp")
-
+test_path = os.path.abspath(r"C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\shapefiles\geo_export_245fc99a-723b-4ad0-ab19-164d6ea290d2.shp")
 #shape_file = os.path.abspath(r"C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\shapefiles\beats_districts.shp")
+#shape_file = os.path.abspath(r"C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\shapefiles\beats_districts.shp")
+shape_file = test_path
 
 fields = arcpy.ListFields(shape_file)
 
@@ -17,8 +18,6 @@ for f in fields:
 for field in fields:
      print("{0} is a type of {1} with a length of {2}".format(field.name, field.type, field.length))
 
-print(fields[6])
-
 
 def return_district(point, verbose=False):
     district = ""
@@ -26,7 +25,7 @@ def return_district(point, verbose=False):
         return f'Calcuated address does not appear to be in Cook county'
     else:
 
-        with arcpy.da.SearchCursor(shape_file, ['SHAPE@', 'OID@', 'MUNICIPALI']) as cursor:
+        with arcpy.da.SearchCursor(shape_file, ['SHAPE@', 'OID@', 'dist_num']) as cursor:
             for row in cursor:
                 polygonGeom = row[0]
                 if polygonGeom.contains(point):
