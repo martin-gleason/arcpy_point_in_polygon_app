@@ -5,7 +5,7 @@ import arcpy
 gc = gc.Geocoder()
 point = ''
 
-shape_file = os.path.abspath(r"C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\shapefiles\Municipality.shp")
+shape_file = os.path.abspath(r"C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\shapefiles\beats_districts.shp")
 
 #shape_file = os.path.abspath(r"C:\Users\martin.gleason\arcpy_point_in_polygon_app\ArcGIS Files\shapefiles\beats_districts.shp")
 
@@ -26,7 +26,7 @@ def return_district(point, verbose=False):
         return f'Calcuated address does not appear to be in Cook county'
     else:
 
-        with arcpy.da.SearchCursor(shape_file, ['SHAPE@', 'OID@']) as cursor:
+        with arcpy.da.SearchCursor(shape_file, ['SHAPE@', 'OID@', 'MUNICIPALI']) as cursor:
             for row in cursor:
                 polygonGeom = row[0]
                 if polygonGeom.contains(point):
