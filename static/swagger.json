@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "description": "geocoder service",
-    "version": ".8",
+    "version": ".7",
     "title": "ArcPy Point in Polygon",
     "contact": {
       "email": "martin.gleason@cookcountyil.gov"
@@ -16,5 +16,32 @@
         "url": "http://127.0.0.1:5000/"
       }
       ]
+    },
+  "paths": {
+    "/units": {
+      "get": {
+        "description": "Get a list of all Cook County Juvenile Court and Probation Services Chicago Field Units, including the supervisor of the unit and the court dates.",
+        "responses": {
+          "200": {
+            "description" : "Successfully received list of field units",
+            "content": {
+
+            }
+
+          }
+        }
+      }
+
+    },
+    "/getdistrict": {
+
+    },
+    "/geocode/": {
+
+    },
+    "/assign/": {
+
     }
+
+  }
 }

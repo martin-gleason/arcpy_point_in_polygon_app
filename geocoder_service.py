@@ -97,9 +97,6 @@ def index():
     zip = request.form.get('zip')
     zip4 = request.form.get('zip4')
 
-    for unit in city_units:
-        print(unit)
-
     if form.validate_on_submit():
         if zip4:
             address = street + " " + line2 + " " + city + ", " + state.upper() + " "+ zip + "+" + zip4
