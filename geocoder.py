@@ -1,84 +1,97 @@
 import os
-import sys
-import arcpy
+from pathlib import Path
+from typing import Optional, Union
 
-"""This class represents how addresses are received, geocoded, and placed within the proper polygon.
-Possible parameters:
-- Address
--- Street Prefix
--- Street Number
--- Street Direction
--- Street Name
--- Street type
--- Street suffix
--- City
--- State
--- Zip
+from arcgis.features import GeoAccessor  # noqa: F401  registers the .spatial pandas accessor
+from arcgis.geocoding import Geocoder as AGOLGeocoder, geocode
+from arcgis.geometry import Geometry, Point
+from arcgis.gis import GIS
+import pandas as pd
 
-eg: 1100 South Hamilton Ave, Chicago, Il 60609
---- Prefix: none
---- Number: 1100
---- Direction: South
---- Name: Hamilton
---- Type: Avenue
---- Suffix: None
+"""
+Geocoder backed by the ArcGIS Python API (arcgis).
 
-Instance Methods:
-    get_district: string of address, return police district or NONE if none
-    geocode_address: string address, return points
-    get_shape_file: returns location to path of shape file
-    set_shape_file: a function to add a shapefile for finding/adding locations
-    return_district: takes an address point, returns numerical police district
-    geocode_to_district: Takes an address, geocodes it, and then returns numerical police district
+This replaces the earlier arcpy implementation so the module can run outside
+ArcGIS Pro / Windows. Two differences worth noting:
+
+1. Geocoding: arcpy consumed a local .loc/.loz locator file directly. The
+   ArcGIS Python API geocodes against a published locator reached through a
+   `GIS` connection (ArcGIS Online or Enterprise). Pass a `locator_url` (a
+   published GeocodeServer) or rely on the authenticated GIS's default
+   geocoders. The legacy .loz file would need to be published first.
+
+2. Point-in-polygon: the local shapefile is still read from disk via the
+   spatial pandas accessor (`pd.DataFrame.spatial.from_featureclass`). Each
+   row's SHAPE is an arcgis Geometry whose .contains() performs the test
+   locally via shapely.
 """
 
+ARC_FILES = Path(__file__).resolve().parent / "ArcGIS Files"
+DEFAULT_SHAPEFILE = ARC_FILES / "shapefiles" / "geo_export_245fc99a-723b-4ad0-ab19-164d6ea290d2.shp"
+DEFAULT_ADDRESS = "1100 South Hamilton Ave, Chicago, IL 60612"
+
+
 class Geocoder:
-    def __init__(self, address = '1100 South Hamilton Ave, Chicago, Il 60612'):
-        self.locator_path = os.path.realpath(r'ArcGIS Files\Address_Points_geojson.loc')
+    def __init__(
+        self,
+        address: str = DEFAULT_ADDRESS,
+        shape_file: Union[str, os.PathLike, None] = None,
+        locator_url: Optional[str] = None,
+        gis: Optional[GIS] = None,
+    ):
         self.address = address
-        #thinking about turning this into a dictionary so we can have different ones called by name
-        self.shape_file = os.path.realpath(r'ArcGIS Files\shapefiles\geo_export_245fc99a-723b-4ad0-ab19-164d6ea290d2.shp')
+        self.shape_file = Path(shape_file) if shape_file else DEFAULT_SHAPEFILE
+        self.gis = gis or GIS()  # anonymous AGOL by default
+        self.locator = AGOLGeocoder(locator_url, gis=self.gis) if locator_url else None
+        self._districts_sdf: Optional[pd.DataFrame] = None
 
-    def __str__(self):
-        return f'The default locator path is {self.locator_path}' \
-        f'and the default address is {self.address}.'
+    def __str__(self) -> str:
+        return (
+            f"Geocoder(shape_file={self.shape_file.name}, "
+            f"locator={'custom' if self.locator else 'default AGOL'}, "
+            f"address={self.address!r})"
+        )
 
-    def set_shape_file(self):  #file -- have to look into uploading a file
-        return 'not developed yet.'
+    def get_shape_file(self) -> str:
+        return str(self.shape_file)
 
-    def get_shape_file(self):
-        return f'the shapefile is {self.shape_file}'
+    def set_shape_file(self, shape_file: Union[str, os.PathLike]) -> str:
+        self.shape_file = Path(shape_file)
+        self._districts_sdf = None  # invalidate cached layer
+        return f"shape file set to {self.shape_file}"
 
-    def geocode_address(self, address, min_score=90):
-        locator = arcpy.geocoding.Locator(self.locator_path)
-        candidate = locator.geocode(address, False)
-        if len(candidate) == 0:
+    def _districts(self) -> pd.DataFrame:
+        if self._districts_sdf is None:
+            self._districts_sdf = pd.DataFrame.spatial.from_featureclass(str(self.shape_file))
+        return self._districts_sdf
+
+    def geocode_address(self, address: str, min_score: int = 90) -> Optional[Geometry]:
+        """Return the highest-scoring candidate Geometry, or None if none pass min_score."""
+        results = (
+            self.locator.geocode(address) if self.locator else geocode(address, gis=self.gis)
+        )
+        if not results:
             return None
-        else:
-            return [sub['Shape'] for sub in candidate][0]
+        best = max(results, key=lambda r: r.get("score", 0))
+        if best.get("score", 0) < min_score:
+            return None
+        loc = best["location"]
+        sr = best.get("attributes", {}).get("SpatialReference") or {"wkid": 4326}
+        return Geometry({"x": loc["x"], "y": loc["y"], "spatialReference": sr})
 
-    def return_district(self, point, verbose = False):
-        district = ''
-        if point == None:
-            return f'Calcuated address does not appear to be in Cook county'
-        else:
-            field = 'dist_num'
-            with arcpy.da.SearchCursor(self.shape_file, ['SHAPE@', 'OID@', field]) as cursor:
-                for row in cursor:
-                    polygonGeom = row[0]
-                    if polygonGeom.contains(point):
-                        district = row[2]
-            while verbose:
-                if len(district) >= 1:
-                    return district
-                elif len(district) < 1:
-                    return 'This address appears to be in Cook County, but not in Chicago.'
-            else:
-                return district
+    def return_district(self, point: Optional[Geometry], verbose: bool = False) -> Union[int, str, None]:
+        if point is None:
+            return "Calculated address does not appear to be in Cook County"
 
-    def geocode_to_district(self, address):
-        point = self.geocode_address(address)
-        return self.return_district(point)
+        sdf = self._districts()
+        for _, row in sdf.iterrows():
+            polygon: Geometry = row["SHAPE"]
+            if polygon.contains(point):
+                return row["dist_num"]
 
+        if verbose:
+            return "This address appears to be in Cook County, but not in Chicago."
+        return None
 
-
+    def geocode_to_district(self, address: str) -> Union[int, str, None]:
+        return self.return_district(self.geocode_address(address))

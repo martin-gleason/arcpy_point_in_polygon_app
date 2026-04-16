@@ -11,8 +11,7 @@ This is a class used to assign officers based on police districts.
 
 import json
 import os
-from pathlib import Path
-from typing import Union
+from typing import List, Union
 
 class UnitStructure:
 
@@ -53,6 +52,7 @@ class FieldUnit(UnitStructure):
     def get_supervisor(self, district: Union[int, str]):
         if district in self.police_district:
             return self.get_spo_name()
+        return None
 
 def list_of_units(*units):
     list_of_units = []
@@ -60,7 +60,7 @@ def list_of_units(*units):
         list_of_units.append(unit.__dict__)
     return list_of_units
 
-def write_unit_to_json(list_of_units:[]):
+def write_unit_to_json(list_of_units: List[dict]):
     with open(os.path.join('units', 'list_of_units.json'), 'w') as f:
         for unit in list_of_units:
             json.dump(unit, f)
